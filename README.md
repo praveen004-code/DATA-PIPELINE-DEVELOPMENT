@@ -22,10 +22,4 @@ TO CREATE A PIPELINE THAT:
 
 # OUTPUT :
 
-Transformed Data:
-
-   id  column     name
-
-0   1      10    Alice
-
-1   3      15  Charlie
+![Image](https://github.com/user-attachments/assets/3687333d-7fe4-4191-9589-15d8043662eb)
