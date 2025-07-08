@@ -1,0 +1,46 @@
+import pandas as pd
+from sqlalchemy import create_engine
+import sqlite3
+
+class DataPipeline:
+    def __init__(self, db_url):
+        self.engine = create_engine(db_url)
+
+    def extract(self, query):
+        return pd.read_sql(query, self.engine)
+
+    def transform(self, df, transformations):
+        for transformation in transformations:
+            df = transformation(df)
+        return df
+
+    def load(self, df, table_name):
+        df.to_sql(table_name, self.engine, if_exists='replace', index=False)
+
+    def run(self, query, transformations, table_name):
+        data = self.extract(query)
+        transformed_data = self.transform(data, transformations)
+        self.load(transformed_data, table_name)
+
+def initialize_database(db_path):
+    # Connect using sqlite3 to create a table with dummy data
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # Create table if it doesn't exist
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS source_table (
+            id INTEGER PRIMARY KEY,
+            column INTEGER,
+            name TEXT
+        )
+    """)
+
+    # Check if table has data
+    cursor.execute("SELECT COUNT(*) FROM source_table")
+    if cursor.fetchone()[0] == 0:
+        # Insert some sample data
+        sample_data = [
+            (1, 10, 'Alice'),
+            (2, -5, 'Bob'),
+            (3, 15, 'Char')]
