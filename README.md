@@ -19,3 +19,9 @@ TO CREATE A PIPELINE THAT:
 1. LOAD RAW DATA(CSV fromat)
 
 2. HANDLES MISSING VALUES
+
+# OUTPUT :
+Transformed Data:
+   id  column     name
+0   1      10    Alice
+1   3      15  Charlie
